@@ -48,3 +48,18 @@ build-iPhoneSimulator/
 
 # unless supporting rvm < 1.11.0 or doing something fancy, ignore this:
 .rvmrc
+=======
+\#*
+*~
+.#*
+.DS_Store
+.idea
+.project
+.sass-cache
+coverage
+Gemfile.lock
+tmp
+nbproject
+pkg
+*.swp
+spec/dummy

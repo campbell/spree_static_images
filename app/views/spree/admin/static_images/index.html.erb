@@ -1,0 +1,47 @@
+<%= stylesheet_link_tag 'admin/spree_static_images.css' %>
+<%= javascript_include_tag 'admin/spree_static_images.js' %>
+
+<% content_for :page_title do %>
+  Static Images
+<% end %>
+
+Showing <%= @images.length %> Images
+
+
+<table>
+  <tr>
+    <th>Product</th>
+    <th>Choose Size</th>
+    <th>Image</th>
+    <th>HTML</th>
+  </tr>
+  <% @images.each do |image| %>
+    <tr class='image-row'>
+      <td>
+        <%= link_to image.viewable.name, product_path(image.viewable.permalink) %>
+        <br>
+        <br>
+        <%= button_to 'Manage Images', admin_product_images_path(image.viewable.permalink), { method: :get } %>
+        <%= button_to 'Edit Product', edit_admin_product_path(image.viewable.permalink), { method: :get }  %>
+      </td>
+      <td>
+        <%= select_tag 'size', options_for_select(image.attachment.styles.map{|k,v| [v.geometry.gsub('>',' px'), k]}) %>
+      </td>
+      <td>
+        <% image.attachment.styles.keys.each do |size| %>
+          <%= image_tag(image.attachment.url(size), class: "size #{size}") %>
+        <% end %>
+      </td>
+      <td>
+        <% image.attachment.styles.keys.each do |size| %>
+          <div class='size <%= size %>'>
+            <div class='copy' data-html='<%= "#{image_tag(image.attachment.url(size))}" %>'>
+              Copy to clipboard
+            </div>
+          </div>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+</table>
+

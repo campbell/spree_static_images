@@ -1,0 +1,12 @@
+.image-row td .size {
+  display: none;
+}
+
+.image-row td .size.mini {
+  display: inherit;
+}
+
+.image-row form.button_to {
+  display: inline-block;
+}
+
