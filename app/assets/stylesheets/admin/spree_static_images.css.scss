@@ -10,3 +10,16 @@
   display: inline-block;
 }
 
+.static-radio {
+  margin-right: 10px;
+}
+
+.image-top {
+  margin-bottom: 10px;
+  overflow: auto;
+
+  .new-image-button {
+    float: right;
+  }
+}
+

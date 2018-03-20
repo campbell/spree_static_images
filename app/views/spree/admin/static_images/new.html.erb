@@ -1,0 +1,23 @@
+<%= stylesheet_link_tag 'admin/spree_static_images.css' %>
+<%= javascript_include_tag 'admin/spree_static_images.js' %>
+
+<% content_for :page_title do %>
+  Static Images
+<% end %>
+
+
+New
+
+<%= form_for [:admin, @static_image] do |f| %>
+  <div>
+    <%= f.label t(:filename) %><br>
+    <%= f.file_field :attachment %>
+  </div>
+  <div>
+    <%= f.label t(:alt_text) %><br>
+    <%= f.text_field :alt %>
+  </div>
+  <div>
+    <%= f.submit 'Create' %>
+  </div>
+<% end %>

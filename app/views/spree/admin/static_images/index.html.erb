@@ -2,11 +2,24 @@
 <%= javascript_include_tag 'admin/spree_static_images.js' %>
 
 <% content_for :page_title do %>
-  Static Images
+  <%= @images.length %> Static Images
 <% end %>
 
-Showing <%= @images.length %> Images
+<div class='image-top'>
+  <div class='new-image-button'>
+    <%= button_to "Add Image", new_admin_static_image_path, {method: :get} %>
+  </div>
 
+  <span class='static-radio'>
+    <%= radio_button_tag(:static, :product, !@static) %>
+    <%= label_tag(:static_product, 'Show Product Images') %>
+  </span>
+
+  <span class='static-radio'>
+    <%= radio_button_tag(:static, :static, @static) %>
+    <%= label_tag(:static_nonproduct, 'Show Other Images') %>
+  </span>
+</div>
 
 <table>
   <tr>
@@ -18,11 +31,17 @@ Showing <%= @images.length %> Images
   <% @images.each do |image| %>
     <tr class='image-row'>
       <td>
-        <%= link_to image.viewable.name, product_path(image.viewable.permalink) %>
-        <br>
-        <br>
-        <%= button_to 'Manage Images', admin_product_images_path(image.viewable.permalink), { method: :get } %>
-        <%= button_to 'Edit Product', edit_admin_product_path(image.viewable.permalink), { method: :get }  %>
+        <% if image.viewable %>
+          <%= link_to image.viewable.name, product_path(image.viewable.permalink) %>
+          <br>
+          <br>
+          <%= button_to 'Manage Images', admin_product_images_path(image.viewable.permalink), { method: :get } %>
+          <%= button_to 'Edit Product', edit_admin_product_path(image.viewable.permalink), { method: :get }  %>
+        <% else %>
+            (not tied to any product)
+
+            <%= link_to 'Delete', admin_static_image_path(image), method: :delete, data: { confirm: 'Are you sure you want to delete this image?' } %>
+        <% end %>
       </td>
       <td>
         <%= select_tag 'size', options_for_select(image.attachment.styles.map{|k,v| [v.geometry.gsub('>',' px'), k]}) %>
@@ -35,8 +54,11 @@ Showing <%= @images.length %> Images
       <td>
         <% image.attachment.styles.keys.each do |size| %>
           <div class='size <%= size %>'>
+            <div class='copy' data-html='<%= "#{image.attachment.url(size)}" %>'>
+              Copy URL to clipboard
+            </div>
             <div class='copy' data-html='<%= "#{image_tag(image.attachment.url(size))}" %>'>
-              Copy to clipboard
+              Copy HTML image tag to clipboard
             </div>
           </div>
         <% end %>

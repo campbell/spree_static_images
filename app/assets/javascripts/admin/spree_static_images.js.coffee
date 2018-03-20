@@ -2,6 +2,11 @@
 setImageHandler = ->
   $('.image-row select').on('change', setImageSize)
   $('.copy').on('click', copyToClipboard)
+  $('input[name="static"]').on('change', changeImageSearch)
+
+changeImageSearch = (event) ->
+  isStatic = $('input[name="static"]:checked').val()
+  window.location.search = "static=" + isStatic
 
 textToClipboard = (text) ->
   dummy = document.createElement("textarea")
