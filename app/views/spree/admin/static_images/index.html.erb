@@ -29,6 +29,8 @@
     <th>HTML</th>
   </tr>
   <% @images.each do |image| %>
+    <% image_options = image.attachment.styles.map{|k,v| [v.geometry.gsub('>',' px'), k]}.push([:original, :original]) %>
+    <% image_sizes = image_options.map{|o| o.last} %>
     <tr class='image-row'>
       <td>
         <% if image.viewable %>
@@ -44,15 +46,15 @@
         <% end %>
       </td>
       <td>
-        <%= select_tag 'size', options_for_select(image.attachment.styles.map{|k,v| [v.geometry.gsub('>',' px'), k]}) %>
+        <%= select_tag 'size', options_for_select(image_options) %>
       </td>
       <td>
-        <% image.attachment.styles.keys.each do |size| %>
+        <% image_sizes.each do |size| %>
           <%= image_tag(image.attachment.url(size), class: "size #{size}") %>
         <% end %>
       </td>
       <td>
-        <% image.attachment.styles.keys.each do |size| %>
+        <% image_sizes.each do |size| %>
           <div class='size <%= size %>'>
             <div class='copy' data-html='<%= "#{image.attachment.url(size)}" %>'>
               Copy URL to clipboard
