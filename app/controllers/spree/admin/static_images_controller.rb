@@ -4,7 +4,7 @@ class Spree::Admin::StaticImagesController < Spree::Admin::ResourceController
     @static = params[:static] == 'static'
 
     if @static
-      @images = Spree::Image.where(viewable_id: nil).all
+      @images = Spree::StaticImage.all
     else
       @images = Spree::Image.where('viewable_id is not null').order('viewable_id').includes(:viewable).all
     end

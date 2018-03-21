@@ -29,7 +29,7 @@
     <th>HTML</th>
   </tr>
   <% @images.each do |image| %>
-    <% image_options = image.attachment.styles.map{|k,v| [v.geometry.gsub('>',' px'), k]}.push([:original, :original]) %>
+    <% image_options = image.attachment.styles.map{|k,v| ["#{k} (#{v.geometry.gsub(/[>\^#]$/,' px')})", k]}.push([:original, :original]) %>
     <% image_sizes = image_options.map{|o| o.last} %>
     <tr class='image-row'>
       <td>
