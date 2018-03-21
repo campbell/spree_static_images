@@ -1,36 +1,41 @@
 <%= stylesheet_link_tag 'admin/spree_static_images.css' %>
 <%= javascript_include_tag 'admin/spree_static_images.js' %>
 
+<% image_options = @images.first.attachment.styles.map{|k,v| ["#{k} (#{v.geometry.gsub(/[>\^#]$/,' px')})", k]}.push([:original, :original]) %>
+<% image_sizes = image_options.map{|o| o.last} %>
+
 <% content_for :page_title do %>
   <%= @images.length %> Static Images
 <% end %>
 
 <div class='image-top'>
   <div class='new-image-button'>
-    <%= button_to "Add Image", new_admin_static_image_path, {method: :get} %>
+    <%= button_to "Add Images", new_admin_static_image_path, {method: :get} %>
   </div>
 
   <span class='static-radio'>
     <%= radio_button_tag(:static, :product, !@static) %>
-    <%= label_tag(:static_product, 'Show Product Images') %>
+    <%= label_tag(:static_product, 'Show Images From Products / Variants') %>
   </span>
 
   <span class='static-radio'>
     <%= radio_button_tag(:static, :static, @static) %>
-    <%= label_tag(:static_nonproduct, 'Show Other Images') %>
+    <%= label_tag(:static_static, 'Show Other Images') %>
   </span>
 </div>
 
-<table>
+<table id='static-images'>
   <tr>
     <th>Product</th>
-    <th>Choose Size</th>
+    <th>
+      Choose Size
+      <br>
+      <%= select_tag 'size', options_for_select(image_options), id: 'setAllSizes' %>
+    </th>
     <th>Image</th>
     <th>HTML</th>
   </tr>
   <% @images.each do |image| %>
-    <% image_options = image.attachment.styles.map{|k,v| ["#{k} (#{v.geometry.gsub(/[>\^#]$/,' px')})", k]}.push([:original, :original]) %>
-    <% image_sizes = image_options.map{|o| o.last} %>
     <tr class='image-row'>
       <td>
         <% if image.viewable %>
@@ -40,12 +45,13 @@
           <%= button_to 'Manage Images', admin_product_images_path(image.viewable.permalink), { method: :get } %>
           <%= button_to 'Edit Product', edit_admin_product_path(image.viewable.permalink), { method: :get }  %>
         <% else %>
+            Filename: <%= image.attachment_file_name %>
             (not tied to any product)
-
+            <br></br>
             <%= link_to 'Delete', admin_static_image_path(image), method: :delete, data: { confirm: 'Are you sure you want to delete this image?' } %>
         <% end %>
       </td>
-      <td>
+      <td class='sizes'>
         <%= select_tag 'size', options_for_select(image_options) %>
       </td>
       <td>
